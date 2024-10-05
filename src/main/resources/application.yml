@@ -4,3 +4,19 @@ server:
 spring:
   application:
     name: sistema-gerenciamento
+  datasource:
+    url: jdbc:h2:mem:devdb      # URL do banco de dados em memória
+    driver-class-name: org.h2.Driver
+    username: sa                     # Nome de usuário padrão
+    password:                        # Senha (deixe vazio para H2)
+    # Para persistir os dados em disco, altere a URL para: jdbc:h2:file:./data/testdb
+
+  h2:
+    console:
+      enabled: true                 # Habilita o console web do H2
+      path: /h2-console             # Caminho para acessar o console
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop              # Atualiza o esquema do banco de dados automaticamente
+    show-sql: true                  # Exibe as consultas SQL no console
