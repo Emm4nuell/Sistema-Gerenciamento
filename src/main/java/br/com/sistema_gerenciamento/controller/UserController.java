@@ -2,19 +2,35 @@ package br.com.sistema_gerenciamento.controller;
 
 import br.com.sistema_gerenciamento.dto.UserRequest;
 import br.com.sistema_gerenciamento.dto.UserResponse;
+import br.com.sistema_gerenciamento.model.UserEntity;
+import br.com.sistema_gerenciamento.service.UserService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 public class UserController implements IUserController{
 
+    private final UserService userService;
+    private final ObjectMapper mapper;
+
     @Override
     public ResponseEntity<Void> create(UserRequest request) {
-        return null;
+
+        var service = userService.create(mapper.convertValue(request, UserEntity.class));
+
+        URI uri = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(service.getId())
+                .toUri();
+        return ResponseEntity.created(uri).build();
     }
 
     @Override
