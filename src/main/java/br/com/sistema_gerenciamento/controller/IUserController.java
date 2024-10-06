@@ -24,6 +24,8 @@ public interface IUserController {
     @DeleteMapping("delete/{id}")
     ResponseEntity<Void> delete(@PathVariable Long id);
 
-    @PatchMapping("update")
-    ResponseEntity<Void> update(@RequestBody UserRequest request);
+    @PatchMapping("update/{id}")
+    ResponseEntity<UserResponse> update(
+            @PathVariable Long id,
+            @RequestBody UserRequest request);
 }

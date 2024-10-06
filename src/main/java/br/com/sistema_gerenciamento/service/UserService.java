@@ -30,7 +30,7 @@ public class UserService {
     @Transactional
     public UserEntity create(UserEntity userEntity){
         if (userEntity == null){
-            log.error("O User não pode ser NULL");
+            log.error("O usuario não pode ser NULL");
             throw new InvalidException("Falha ao criar usuário: o usuário fornecido é nulo. Por favor, forneça dados válidos.");
         }
 
@@ -77,11 +77,31 @@ public class UserService {
             throw new InvalidException("O ID não pode ser nulo.");
         }
 
-        var entity = iUserRepository.findById(id)
-                .orElseThrow(() -> {
-                    log.error("Nao e possivel deleter usuario com ID: {}", id);
-                    return new UserNotFoundException("Usuario com ID: " + id + " nao localizado para deletar da base de dados.");
-        });
+        var entity = findById(id);
         iUserRepository.deleteById(entity.getId());
+    }
+
+    /**
+     *
+     * @param id verifica se o usuario existe para poder atualizar.
+     * @param userEntity atualiza as informações do usuario na base de dados.
+     * @throws InvalidException gera um erro se o o id ou userEntity for nulo.
+     * @throws UserNotFoundException gera um erro se o usuario nao for localizado.
+     * @return retorna um userEntity ja atualizado.
+     */
+
+    @Transactional
+    public UserEntity update(Long id, UserEntity userEntity) {
+        if (id == null || userEntity == null){
+            log.error("O ID: {} ou USUARIO: {} não pode ser nulo", id, userEntity);
+            throw new InvalidException("O ID ou USUARIO não pode ser nulo.");
+        }
+
+        if (iUserRepository.findById(id).isEmpty()){
+            log.error("Usuário com ID: {} não foi encontrado.", id);
+            throw new UserNotFoundException("Usuário com ID " + id + " não foi encontrado.");
+        }
+        userEntity.setId(id);
+        return iUserRepository.save(userEntity);
     }
 }

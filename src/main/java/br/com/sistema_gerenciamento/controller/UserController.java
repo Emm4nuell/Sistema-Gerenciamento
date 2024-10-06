@@ -52,7 +52,8 @@ public class UserController implements IUserController{
     }
 
     @Override
-    public ResponseEntity<Void> update(UserRequest request) {
-        return null;
+    public ResponseEntity<UserResponse> update(Long id, UserRequest request) {
+        var response = userService.update(id, mapper.convertValue(request, UserEntity.class));
+        return ResponseEntity.status(HttpStatus.OK).body(mapper.convertValue(request, UserResponse.class));
     }
 }
