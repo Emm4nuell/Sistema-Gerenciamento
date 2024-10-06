@@ -2,10 +2,9 @@ package br.com.sistema_gerenciamento.controller;
 
 import br.com.sistema_gerenciamento.dto.UserRequest;
 import br.com.sistema_gerenciamento.dto.UserResponse;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RequestMapping("user/")
 public interface IUserController {
@@ -16,10 +15,12 @@ public interface IUserController {
     @GetMapping("findById/{id}")
     ResponseEntity<UserResponse> findById(@PathVariable Long id);
 
-    @GetMapping("lista")
-    ResponseEntity<List<UserResponse>> findByAllPage(@RequestParam(defaultValue = "0") String page,
-                                                     @RequestParam(defaultValue = "5") String size,
-                                                     @RequestParam(defaultValue = "id") String sortBy);
+    @GetMapping("findAll")
+    ResponseEntity<Page<UserResponse>> findByAllPage(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "5") int size,
+            @RequestParam(value = "sort", defaultValue = "name") String sort,
+            @RequestParam(value = "direction", defaultValue = "asc") String direction);
 
     @DeleteMapping("delete/{id}")
     ResponseEntity<Void> delete(@PathVariable Long id);

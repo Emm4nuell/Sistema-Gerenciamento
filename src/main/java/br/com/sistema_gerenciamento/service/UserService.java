@@ -7,6 +7,8 @@ import br.com.sistema_gerenciamento.model.UserEntity;
 import br.com.sistema_gerenciamento.repository.IUserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -103,5 +105,9 @@ public class UserService {
         }
         userEntity.setId(id);
         return iUserRepository.save(userEntity);
+    }
+
+    public Page<UserEntity> findAll(Pageable pageable) {
+        return iUserRepository.findAll(pageable);
     }
 }
