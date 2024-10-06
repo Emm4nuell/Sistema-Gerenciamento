@@ -62,6 +62,18 @@ public class HandlerException {
                         http.getRequestURI()));
     }
 
+    @ExceptionHandler(AlreadyExistsException.class)
+    public ResponseEntity<Map<String, Object>> alreadyExistsException(
+            AlreadyExistsException exception,
+            HttpServletRequest http){
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(getError(
+                        exception.getMessage(),
+                        "Dados nao pode ser duplicado.",
+                        HttpStatus.CONFLICT.value(),
+                        http.getRequestURI()));
+    }
+
     public Map<String, Object> getError(String message, String error, int status, String path){
         Map<String, Object> response = new HashMap<>();
         response.put("status", status);

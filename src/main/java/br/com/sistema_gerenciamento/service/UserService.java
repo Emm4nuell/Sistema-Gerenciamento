@@ -1,5 +1,6 @@
 package br.com.sistema_gerenciamento.service;
 
+import br.com.sistema_gerenciamento.exception.AlreadyExistsException;
 import br.com.sistema_gerenciamento.exception.InvalidException;
 import br.com.sistema_gerenciamento.exception.UserNotFoundException;
 import br.com.sistema_gerenciamento.model.UserEntity;
@@ -22,6 +23,7 @@ public class UserService {
      *
      * @param userEntity cria um novo usuario.
      * @throws InvalidException gera um erro se o usuario for nulo.
+     * @throws AlreadyExistsException gera um erro se houver email duplicado.
      * @return O usuario criado
      */
 
@@ -31,6 +33,12 @@ public class UserService {
             log.error("O User não pode ser NULL");
             throw new InvalidException("Falha ao criar usuário: o usuário fornecido é nulo. Por favor, forneça dados válidos.");
         }
+
+        if (iUserRepository.findByEmail(userEntity.getEmail()).isPresent()){
+            log.error("EMAIL: {} já cadastrado na base de dados.", userEntity.getEmail());
+            throw new AlreadyExistsException("EMAIL: " + userEntity.getEmail() + " já cadastrado na base de dados. ");
+        }
+
         return iUserRepository.save(userEntity);
     }
 
@@ -38,7 +46,7 @@ public class UserService {
      * Pesquisar usuario pelo ID
      *
      * @param id pesquisa um usuario na base de dados.
-     * @throws InvalidException erro ao verificar que o id e nulo.
+     * @throws InvalidException erro ao verificar que o id é nulo.
      * @throws UserNotFoundException gera um erro se o usuario não for localizado.
      * @return retorna um userEntity.
      */
