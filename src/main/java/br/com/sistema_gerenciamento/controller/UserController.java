@@ -6,6 +6,7 @@ import br.com.sistema_gerenciamento.model.UserEntity;
 import br.com.sistema_gerenciamento.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -35,7 +36,8 @@ public class UserController implements IUserController{
 
     @Override
     public ResponseEntity<UserResponse> findById(Long id) {
-        return null;
+        UserResponse response = mapper.convertValue(userService.findById(id), UserResponse.class);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @Override

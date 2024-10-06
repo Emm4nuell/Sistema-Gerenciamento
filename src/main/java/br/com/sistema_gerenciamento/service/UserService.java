@@ -1,6 +1,7 @@
 package br.com.sistema_gerenciamento.service;
 
 import br.com.sistema_gerenciamento.exception.InvalidUserException;
+import br.com.sistema_gerenciamento.exception.UserNotFoundException;
 import br.com.sistema_gerenciamento.model.UserEntity;
 import br.com.sistema_gerenciamento.repository.IUserRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,5 +32,21 @@ public class UserService {
             throw new InvalidUserException("Falha ao criar usuário: o usuário fornecido é nulo. Por favor, forneça dados válidos.");
         }
         return iUserRepository.save(userEntity);
+    }
+
+    /**
+     * Pesquisar usuario pelo ID
+     *
+     * @param id pesquisa um usuario na base de dados.
+     * @throws UserNotFoundException gera um erro se o usuario não for localizado.
+     * @return retorna um userEntity.
+     */
+
+    public UserEntity findById(Long id) {
+        return iUserRepository.findById(id)
+                .orElseThrow(() -> {
+                    log.error("Usuário com ID: {} não foi encontrado.", id);
+                    return new UserNotFoundException("Usuário com ID " + id + " não foi encontrado.");
+                });
     }
 }

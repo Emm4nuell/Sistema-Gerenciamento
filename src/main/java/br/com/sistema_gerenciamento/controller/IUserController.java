@@ -13,7 +13,7 @@ public interface IUserController {
     @PostMapping("create")
     ResponseEntity<Void> create(@RequestBody UserRequest request);
 
-    @GetMapping("id/{id}")
+    @GetMapping("findById/{id}")
     ResponseEntity<UserResponse> findById(@PathVariable Long id);
 
     @GetMapping("lista")

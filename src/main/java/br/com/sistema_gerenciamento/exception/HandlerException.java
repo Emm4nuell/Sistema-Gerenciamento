@@ -50,6 +50,18 @@ public class HandlerException {
                         http.getRequestURI()));
     }
 
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<Map<String, Object>> userNotFoundException(
+            UserNotFoundException exception,
+            HttpServletRequest http){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(getError(
+                        exception.getMessage(),
+                        "Dados não localizado na base de dados.",
+                        HttpStatus.NOT_FOUND.value(),
+                        http.getRequestURI()));
+    }
+
     public Map<String, Object> getError(String message, String error, int status, String path){
         Map<String, Object> response = new HashMap<>();
         response.put("status", status);
