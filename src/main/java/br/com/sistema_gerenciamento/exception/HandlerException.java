@@ -38,9 +38,9 @@ public class HandlerException {
                         http.getRequestURI()));
     }
 
-    @ExceptionHandler(InvalidUserException.class)
+    @ExceptionHandler(InvalidException.class)
     public ResponseEntity<Map<String, Object>> invalidUserException(
-            InvalidUserException exception,
+            InvalidException exception,
             HttpServletRequest http){
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(getError(

@@ -1,6 +1,6 @@
 package br.com.sistema_gerenciamento.service;
 
-import br.com.sistema_gerenciamento.exception.InvalidUserException;
+import br.com.sistema_gerenciamento.exception.InvalidException;
 import br.com.sistema_gerenciamento.exception.UserNotFoundException;
 import br.com.sistema_gerenciamento.model.UserEntity;
 import br.com.sistema_gerenciamento.repository.IUserRepository;
@@ -21,7 +21,7 @@ public class UserService {
      * Criar um novo usuario no sistema
      *
      * @param userEntity cria um novo usuario.
-     * @throws InvalidUserException gera um erro se o usuario for nulo.
+     * @throws InvalidException gera um erro se o usuario for nulo.
      * @return O usuario criado
      */
 
@@ -29,7 +29,7 @@ public class UserService {
     public UserEntity create(UserEntity userEntity){
         if (userEntity == null){
             log.error("O User não pode ser NULL");
-            throw new InvalidUserException("Falha ao criar usuário: o usuário fornecido é nulo. Por favor, forneça dados válidos.");
+            throw new InvalidException("Falha ao criar usuário: o usuário fornecido é nulo. Por favor, forneça dados válidos.");
         }
         return iUserRepository.save(userEntity);
     }
@@ -38,11 +38,16 @@ public class UserService {
      * Pesquisar usuario pelo ID
      *
      * @param id pesquisa um usuario na base de dados.
+     * @throws InvalidException erro ao verificar que o id e nulo.
      * @throws UserNotFoundException gera um erro se o usuario não for localizado.
      * @return retorna um userEntity.
      */
 
     public UserEntity findById(Long id) {
+        if (id == null){
+            log.error("O ID não pode ser nulo");
+            throw new InvalidException("O ID não pode ser nulo.");
+        }
         return iUserRepository.findById(id)
                 .orElseThrow(() -> {
                     log.error("Usuário com ID: {} não foi encontrado.", id);
