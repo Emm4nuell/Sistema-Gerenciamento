@@ -62,4 +62,26 @@ public class UserService {
                     return new UserNotFoundException("Usuário com ID " + id + " não foi encontrado.");
                 });
     }
+
+    /**
+     * Deleta usuario pelo id
+     *
+     * @param id deletar usuario da base de dados.
+     * @throws InvalidException erro se o id for nulo.
+     * @throws UserNotFoundException erro se o usuario nao for localizado.
+     */
+
+    public void delete(Long id) {
+        if (id == null){
+            log.error("O ID não pode ser nulo");
+            throw new InvalidException("O ID não pode ser nulo.");
+        }
+
+        var entity = iUserRepository.findById(id)
+                .orElseThrow(() -> {
+                    log.error("Nao e possivel deleter usuario com ID: {}", id);
+                    return new UserNotFoundException("Usuario com ID: " + id + " nao localizado para deletar da base de dados.");
+        });
+        iUserRepository.deleteById(entity.getId());
+    }
 }

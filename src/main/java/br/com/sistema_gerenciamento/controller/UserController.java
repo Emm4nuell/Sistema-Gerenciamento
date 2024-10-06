@@ -47,7 +47,8 @@ public class UserController implements IUserController{
 
     @Override
     public ResponseEntity<Void> delete(Long id) {
-        return null;
+        userService.delete(id);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @Override
