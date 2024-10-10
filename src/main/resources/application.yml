@@ -21,5 +21,12 @@ spring:
       ddl-auto: create-drop              # Atualiza o esquema do banco de dados automaticamente
     show-sql: true                  # Exibe as consultas SQL no console
 
+aws:
+  config:
+    accessKey:
+    secretKey:
+    region: us-east-1
+    topic-arn: 
+
 kafka:
   topic: log-error

@@ -21,6 +21,7 @@ import java.time.LocalDateTime;
 public class UserService {
 
     private final IUserRepository iUserRepository;
+    private final PublishSnsService snsService;
     private final LogKafka logKafka;
 
 
@@ -53,6 +54,9 @@ public class UserService {
             throw new AlreadyExistsException(errorMessage);
         }
 
+        snsService.publishSuccess(new LogErrorResponse(
+                LocalDateTime.now(),
+                "Usuario criado com sucesso. EMAIL: " + userEntity.getEmail()));
         return iUserRepository.save(userEntity);
     }
 
@@ -97,6 +101,7 @@ public class UserService {
      *
      */
 
+    @Transactional
     public void delete(Long id) {
         if (id == null){
             String errorMessage = "Falha ao deletar o usuário: o ID fornecido é nulo. Por favor, forneça dados válidos.";
@@ -108,6 +113,9 @@ public class UserService {
 
         var entity = findById(id);
         iUserRepository.deleteById(entity.getId());
+        snsService.publishSuccess(new LogErrorResponse(
+                LocalDateTime.now(),
+                "Usuario criado com sucesso. ID: " + id));
     }
 
     /**
@@ -140,6 +148,9 @@ public class UserService {
             throw new UserNotFoundException(errorMessage);
         }
         userEntity.setId(id);
+        snsService.publishSuccess(new LogErrorResponse(
+                LocalDateTime.now(),
+                "Usuario atualizado com sucesso. ID: " + id));
         return iUserRepository.save(userEntity);
     }
 
